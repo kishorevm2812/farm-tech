@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/toaster"
 import { ThemeProvider } from "@/components/theme-provider"
 import { MobileNavbar } from "@/components/mobile-navbar"
 import { ToastProvider } from "@/components/use-toast"
+import { AuthProvider } from "@/contexts/auth-context"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -23,13 +24,15 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-          <ToastProvider>
-            <div className="flex flex-col min-h-screen">
-              <MobileNavbar />
-              <main className="flex-1 container pb-16">{children}</main>
-            </div>
-            <Toaster />
-          </ToastProvider>
+          <AuthProvider>
+            <ToastProvider>
+              <div className="flex flex-col min-h-screen">
+                <MobileNavbar />
+                <main className="flex-1 container pb-16">{children}</main>
+              </div>
+              <Toaster />
+            </ToastProvider>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -1,10 +1,24 @@
 "use client"
 
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Plus, Search } from "lucide-react"
+import { AddPostModal } from "./add-post-modal"
 
 export function CommunityHeader() {
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const handlePostSubmit = (post: {
+    title: string
+    content: string
+    category: string
+    image: File | null
+  }) => {
+    // Here you would typically send the data to your backend
+    console.log("New post:", post)
+  }
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -14,10 +28,7 @@ export function CommunityHeader() {
         </div>
         <Button
           size="sm"
-          onClick={() => {
-            // This is a placeholder function. In a real app, you'd open a modal or navigate to a new page.
-            alert("New Post functionality will be implemented here")
-          }}
+          onClick={() => setIsModalOpen(true)}
         >
           <Plus className="h-4 w-4 mr-2" />
           New Post
@@ -27,6 +38,11 @@ export function CommunityHeader() {
         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
         <Input type="search" placeholder="Search community posts..." className="pl-8" />
       </div>
+      <AddPostModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handlePostSubmit}
+      />
     </div>
   )
 }

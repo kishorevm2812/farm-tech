@@ -9,7 +9,7 @@ export function MarketplaceListing() {
     {
       id: 1,
       title: "Fresh Organic Tomatoes",
-      image: "/placeholder.svg?height=150&width=150",
+      image: "/tomato.jpg.webp",
       price: "$4.50",
       unit: "per pound",
       location: "Downtown Community Garden",
@@ -20,7 +20,7 @@ export function MarketplaceListing() {
     {
       id: 2,
       title: "Heirloom Lettuce Mix",
-      image: "/placeholder.svg?height=150&width=150",
+      image: "/Lettuce.webp",
       price: "$3.00",
       unit: "per bunch",
       location: "Riverside Farms",
@@ -31,7 +31,7 @@ export function MarketplaceListing() {
     {
       id: 3,
       title: "Basil Plant Seedlings",
-      image: "/placeholder.svg?height=150&width=150",
+      image: "/Basil.webp",
       price: "$2.50",
       unit: "each",
       location: "Sunshine Community Garden",

@@ -1,26 +1,20 @@
 "use client"
 
-import { useState } from "react"
-import Link from "next/link"
-import Image from "next/image"
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
+import { forwardRef, useImperativeHandle, useState } from "react"
+import { AlertCircle, Droplet } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
+import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Droplet, AlertCircle } from "lucide-react"
+import Image from "next/image"
+import Link from "next/link"
 
-interface Plant {
-  id: number
-  name: string
-  variety: string
-  image: string
-  status: string
-  growthStage: string
-  daysPlanted: number
-  waterNeeds: string
+export interface PlantGridRef {
+  addPlant: (plant: Omit<Plant, "id">) => void
 }
 
-export function PlantGrid() {
+export const PlantGrid = forwardRef<PlantGridRef>((props, ref) => {
   const [filter, setFilter] = useState("all")
+  const [searchQuery, setSearchQuery] = useState("")
   const [plants, setPlants] = useState<Plant[]>([
     {
       id: 1,
@@ -88,15 +82,35 @@ export function PlantGrid() {
     setPlants([...plants, { ...newPlant, id: plants.length + 1 }])
   }
 
-  const filteredPlants =
-    filter === "all"
-      ? plants
-      : plants.filter((plant) =>
-          filter === "needs-attention" ? plant.status === "needs-attention" : plant.growthStage === filter,
-        )
+  useImperativeHandle(ref, () => ({
+    addPlant
+  }))
+
+  const filteredPlants = plants
+    .filter(plant => 
+      searchQuery === "" ||
+      plant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      plant.variety.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    .filter(plant =>
+      filter === "all" ?
+        true :
+        filter === "needs-attention" ? 
+          plant.status === "needs-attention" : 
+          plant.growthStage === filter
+    )
 
   return (
     <div className="space-y-4">
+      <div className="mb-4">
+        <input
+          type="text"
+          placeholder="Search plants..."
+          className="w-full px-3 py-2 border rounded-md border-input bg-background"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </div>
       <Tabs defaultValue="all" value={filter} onValueChange={setFilter}>
         <TabsList className="grid grid-cols-4 md:w-auto md:grid-cols-6">
           <TabsTrigger value="all">All</TabsTrigger>
@@ -159,5 +173,18 @@ export function PlantGrid() {
       </Tabs>
     </div>
   )
+})
+
+PlantGrid.displayName = "PlantGrid"
+
+interface Plant {
+  id: number
+  name: string
+  variety: string
+  image: string
+  status: string
+  growthStage: string
+  daysPlanted: number
+  waterNeeds: string
 }
 

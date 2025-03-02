@@ -9,9 +9,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 interface AddPlantModalProps {
   isOpen: boolean
   onClose: () => void
+  onSubmit: (plant: Omit<Plant, "id">) => void
 }
 
-export function AddPlantModal({ isOpen, onClose }: AddPlantModalProps) {
+export function AddPlantModal({ isOpen, onClose, onSubmit }: AddPlantModalProps) {
   const [plantName, setPlantName] = useState("")
   const [plantVariety, setPlantVariety] = useState("")
   const [selectedImage, setSelectedImage] = useState<File | null>(null)
@@ -26,9 +27,21 @@ export function AddPlantModal({ isOpen, onClose }: AddPlantModalProps) {
   }
 
   const handleSubmit = () => {
-    // Here you would typically send the data to your backend
-    console.log("Submitting plant:", { plantName, plantVariety, selectedImage })
-    // Reset form and close modal
+    if (!plantName || !plantVariety) {
+      alert("Please fill in all required fields")
+      return
+    }
+
+    onSubmit({
+      name: plantName,
+      variety: plantVariety,
+      image: previewUrl || "/placeholder.svg",
+      status: "healthy",
+      growthStage: "seedling",
+      daysPlanted: 0,
+      waterNeeds: "medium"
+    })
+
     setPlantName("")
     setPlantVariety("")
     setSelectedImage(null)
